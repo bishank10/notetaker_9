@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/bishank10/notetaker_9/issues"
   },
-  "homepage": "https://github.com/bishank10/notetaker_9#readme"
+  "homepage": "https://github.com/bishank10/notetaker_9#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
