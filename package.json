@@ -20,5 +20,8 @@
   "homepage": "https://github.com/bishank10/notetaker_9#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }
