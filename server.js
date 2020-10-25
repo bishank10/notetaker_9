@@ -2,6 +2,7 @@
 
 var express = require("express");
 var fs = require("fs");
+var path = require("path");
 var dbFile = require("./db/db.json")
 var app = express();
 var PORT = process.env.PORT || 3001;
@@ -15,16 +16,18 @@ let dbJson = require("./db/db.json");
 
 // gets the index.html file
 app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/notes.html"))
+    res.sendFile(path.join(__dirname, "", "./public/notes.html"))
+    console.log("file sent");
 })
 
 // gets the notes.html when the right path is hit
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/notes.html"))
+app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/index.html"))
+    console.log("file sent");
 })
 
-//responds with db.json file when path as mentioned is satisfied
+// responds with db.json file when path as mentioned is satisfied
 app.get("/api/notes", function (req, res) {
     res.json(dbFile);
     console.log(dbFile);
@@ -41,7 +44,7 @@ app.post("/api/notes", function (req, res) {
     res.json(newNote);
     dbFile.push(newNote);
 
-    fs.writeFile("./db/db.json", JSON.stringify(dbFile), function (err) {
+    fs.writeFile("../db/db.json", JSON.stringify(dbFile), function (err) {
         res.send("new character created")
         res.end();
     })
@@ -59,7 +62,11 @@ app.delete("/api/notes/:id", function (req, res) {
     console.log(unTouchedCharacters);
 
     //updating the json file
-    fs.writeFile("./db/db.json", JSON.stringify(unTouchedCharacters), function (err) {
+
+    if (unTouchedCharacters === []) {
+        res.status(404).send("the id you are looking for doe not exist");
+    }
+    fs.writeFile("../db/db.json", JSON.stringify(unTouchedCharacters), function (err) {
         res.send("character deleted")
         res.end();
     })
