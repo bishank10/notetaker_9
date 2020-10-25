@@ -9,22 +9,28 @@ var PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
+
 let dbJson = require("./db/db.json");
 
-// gets the note.html file
+// gets the index.html file
 app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, '', "./public/index.html"))
 })
+
+// gets the notes.html when the right path is hit
 
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, '', "./public/notes.html"))
 })
 
-
+//responds with db.json file when path as mentioned is satisfied
 app.get("/api/notes", function (req, res) {
     res.json(dbFile);
-    console.log();
+    console.log(dbFile);
 })
+
+//updates the db.json file by adding a new note
 
 app.post("/api/notes", function (req, res) {
 
@@ -37,23 +43,25 @@ app.post("/api/notes", function (req, res) {
 
     fs.writeFile("./db/db.json", JSON.stringify(dbFile), function (err) {
         res.send("new character created")
-        res.end(); // this has to be inside a function to avoid error just dummy code for this to work you will have to require fs
+        res.end();
     })
 })
+
+
 
 // function is fired when the id is selected for deletion
 
 app.delete("/api/notes/:id", function (req, res) {
-    const idCharacterToBeDeleted = req.params.id;
-  
+    const idCharacterToBeDeleted = parseInt(req.params.id);
+
     // we want all characters not matching the one being updated
-    const unTouchedCharacters = characters.filter(charObj => charObj.id !== idCharacterToBeDeleted)
+    const unTouchedCharacters = dbFile.filter(charObj => charObj.id !== idCharacterToBeDeleted)
     console.log(unTouchedCharacters);
-  
+
     //updating the json file
-    fs.writeFile("./characters.json", JSON.stringify(unTouchedCharacters), function(err){
-      res.send("new character updated")
-      res.end(); // this has to be inside a function to avoid error just dummy code for this to work you will have to require fs
+    fs.writeFile("./db/db.json", JSON.stringify(unTouchedCharacters), function (err) {
+        res.send("character deleted")
+        res.end();
     })
 
 })
