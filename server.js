@@ -14,16 +14,21 @@ app.use(express.static('public'));
 
 let dbJson = require("./db/db.json");
 
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "public/index.html"))
+    console.log("file sent");
+})
+
 // gets the index.html file
 app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "", "./public/notes.html"))
+    res.sendFile(path.join(__dirname, "public/notes.html"))
     console.log("file sent");
 })
 
 // gets the notes.html when the right path is hit
 
 app.get("/*", function (req, res) {
-    res.sendFile(path.join(__dirname, "./public/index.html"))
+    res.sendFile(path.join(__dirname, "public/index.html"))
     console.log("file sent");
 })
 
