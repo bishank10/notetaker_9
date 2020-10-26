@@ -46,10 +46,13 @@ app.post("/api/notes", function (req, res) {
     let uniqueId = 1;
     req.body.id = uniqueId;
     uniqueId++;
-    res.json(newNote);
     dbFile.push(newNote);
 
     fs.writeFile("../db/db.json", JSON.stringify(dbFile), function (err) {
+        if (err){
+            res.status(400).send("invalid request")
+        }
+        res.json(newNote);
         res.send("new character created")
         res.end();
     })
@@ -63,12 +66,13 @@ app.delete("/api/notes/:id", function (req, res) {
     const idCharacterToBeDeleted = parseInt(req.params.id);
 
     // we want all characters not matching the one being updated
-    const unTouchedCharacters = dbFile.filter(charObj => charObj.id !== idCharacterToBeDeleted)
+    const unTouchedCharacters = dbFile.filter(charObj => charObj.id !== idCharacterToBeDeleted);
+    const itemToBeDeleted = dbFile.filter(charObj => charObj.id === idCharacterToBeDeleted)
     console.log(unTouchedCharacters);
 
     //updating the json file
 
-    if (unTouchedCharacters === []) {
+    if (itemToBeDeleted === []) {
         res.status(404).send("the id you are looking for doe not exist");
     }
     fs.writeFile("../db/db.json", JSON.stringify(unTouchedCharacters), function (err) {
