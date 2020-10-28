@@ -5,12 +5,15 @@ var fs = require("fs");
 var path = require("path");
 var dbFile = require("./db/db.json")
 var app = express();
-var PORT = process.env.PORT || 3001;
+var PORT = process.env.PORT ||3001;
 
+
+// required code to reade th public file
+app.use(express.static('public'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public'));
+
 
 let dbJson = require("./db/db.json");
 
@@ -48,12 +51,12 @@ app.post("/api/notes", function (req, res) {
     uniqueId++;
     dbFile.push(newNote);
 
-    fs.writeFile("../db/db.json", JSON.stringify(dbFile), function (err) {
-        if (err){
+    fs.writeFile("./db/db.json", JSON.stringify(dbFile), function (err) {
+        if (err) {
             res.status(400).send("invalid request")
         }
         res.json(newNote);
-        res.send("new character created")
+        console.log("new character created")
         res.end();
     })
 })
