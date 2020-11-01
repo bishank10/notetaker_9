@@ -38,6 +38,14 @@ app.get("/*", function (req, res) {
 // responds with db.json file when path as mentioned is satisfied
 app.get("/api/notes", function (req, res) {
     res.json(dbFile);
+    fs.readFile("../db/db.json", "utf-8", function (err,data) {
+        if(err){
+            return res.status(400).send()
+        }
+        res.json(data);
+        res.end();
+    });
+    res.json(dbFile);
     console.log(dbFile);
 })
 
@@ -46,7 +54,7 @@ app.get("/api/notes", function (req, res) {
 app.post("/api/notes", function (req, res) {
 
     const newNote = req.body;
-    let uniqueId = 1;
+    let uniqueId = dbFile.length;
     req.body.id = uniqueId;
     uniqueId++;
     dbFile.push(newNote);
@@ -55,10 +63,11 @@ app.post("/api/notes", function (req, res) {
         if (err) {
             res.status(400).send("invalid request")
         }
-        res.json(newNote);
+        
+    });
+    res.json(newNote);
         console.log("new character created")
         res.end();
-    })
 })
 
 
@@ -82,6 +91,8 @@ app.delete("/api/notes/:id", function (req, res) {
         res.send("character deleted")
         res.end();
     })
+    
+
 
 })
 
